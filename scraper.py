@@ -19,14 +19,14 @@ soup = BeautifulSoup(html_text.content, 'lxml')
 def get_address(addr):
     address_All = soup.find_all('span', class_='result-hood')
 
-    arr = [len(address_All)]
+    arr_add = [len(address_All)]
+    if(addr != ''):
+        for address in address_All:
+            address = address.text
+            if addr in address:
+                arr_add.append(address)
+    return(arr_add)
 
-    for address in address_All:
-        address = address.text
-        if addr in address:
-            arr.append(address)
-    return(arr)
-    
 
 
     # for address in addresses:
@@ -34,22 +34,26 @@ def get_address(addr):
 
 def get_Name():
     names = soup.find_all('a', class_='result-title hdrlnk')
+    arr_name = [len(names)]
     for name in names:
-        print(name.text.strip())
+        arr_name.append(name)
+        # print(name.text.strip())
+    return(arr_name)
 
 def get_date():
     upload_dates = soup.find_all('time', class_='result-date')
+    arr_date = [len(upload_dates)]
     for date in upload_dates:
         # print(date.text)
-        return(date.text)
+        arr_date.append(date.text)
+        # return(date.text)
+    return(arr_date)
 
 
 
 
-
-
-print(get_address("vancouver"))
+get_address("vancouver")
 # get_address("vancouver")
   
-# get_Name()
-# print(get_date())
+get_Name()
+get_date()
