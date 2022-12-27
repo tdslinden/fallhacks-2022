@@ -39,3 +39,10 @@ input {
   flex: 0 0 200px;
   margin-left: 10px;
 }
+body {
+    margin-top: 15rem;
+    text-align: center;
+}
+form {
+    display: inline-block;
+}
