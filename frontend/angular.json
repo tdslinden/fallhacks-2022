@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "PigReport": {
+    "fallHacks": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/pig-report",
+            "outputPath": "dist/fallHacks",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -67,10 +67,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "PigReport:build:production"
+              "browserTarget": "fallHacks:build:production"
             },
             "development": {
-              "browserTarget": "PigReport:build:development"
+              "browserTarget": "fallHacks:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -78,7 +78,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "PigReport:build"
+            "browserTarget": "fallHacks:build"
           }
         },
         "test": {
@@ -103,5 +103,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "a66e8fb8-5eb6-4156-a9fb-bb56db37e77c"
   }
 }
