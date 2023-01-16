@@ -1,24 +1,23 @@
 #from unittest import result
-
 # from email.utils import getaddresses
 # from socket import getnameinfo
 from bs4 import BeautifulSoup
 import requests
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template,redirect,url_for
 app = Flask(__name__)
 
 
-@app.route('/')
-def my_form():
-    return render_template('frontend/index.html')
 
-
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['POST','GET'])
 def my_form_post():
-    variable = request.form['']
-    return variable
+    if request.method == "POST":
+        upper_price = request.form['max_price']
+        address = request.form['address']
+        bed = request.form['bed']
+        output(find_Upper_Price(upper_price), get_Name(),
+        get_date(), get_address(address), bed(bed))
+        return(render_template("frontend/index.html"))
 # take the form data and plug it into BS4 and scrape the data
-
 
 html_text = requests.get('https://vancouver.craigslist.org/search/apa')
 soup = BeautifulSoup(html_text.content, 'lxml')
@@ -113,8 +112,6 @@ def output(price, name, date, address, bed):
         print(str(price[i]) + str(name[i]) +
               str(date[i]) + str(address[i]) + str(bed[i]))
         i += 1
-    print(price[0])
-
-
-output(find_Upper_Price(3500), get_Name(),
-       get_date(), get_address("Vancouver"), bed(3))
+    
+if __name__ == "__main__":
+    app.run(debug=True)
