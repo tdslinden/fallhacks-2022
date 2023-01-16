@@ -25,6 +25,7 @@ def get_address(addr):
             address = address.text
             if addr in address:
                 arr_add.append(address)
+    print(arr_add)
     return(arr_add)
 
 
@@ -37,7 +38,7 @@ def get_Name():
     arr_name = [len(names)]
     for name in names:
         arr_name.append(name)
-        # print(name.text.strip())
+    print(name.text.strip())
     return(arr_name)
 
 def get_date():
@@ -47,6 +48,7 @@ def get_date():
         # print(date.text)
         arr_date.append(date.text)
         # return(date.text)
+    print(arr_date)
     return(arr_date)
 
 
