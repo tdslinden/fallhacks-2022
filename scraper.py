@@ -3,21 +3,28 @@
 # from socket import getnameinfo
 from bs4 import BeautifulSoup
 import requests
-from flask import Flask, request, render_template,redirect,url_for
+from flask import Flask, request, render_template, redirect, url_for
 app = Flask(__name__)
 
 
-
-@app.route('/', methods=['POST','GET'])
+@app.route('/', methods=['POST', 'GET'])
 def my_form_post():
-    if request.method == "POST":
+    if request.method == 'POST':
         upper_price = request.form['max_price']
-        address = request.form['address']
-        bed = request.form['bed']
+        address = request.form['city']
+        bedroom = request.form['bed']
         output(find_Upper_Price(upper_price), get_Name(),
-        get_date(), get_address(address), bed(bed))
-        return(render_template("frontend/index.html"))
+               get_date(), get_address(address), bed(bedroom))
+        return redirect(url_for('output'))
+    else:
+        return (render_template('index.html'))
 # take the form data and plug it into BS4 and scrape the data
+
+
+@app.route('/output')
+def output():
+    return render_template('output.html')
+
 
 html_text = requests.get('https://vancouver.craigslist.org/search/apa')
 soup = BeautifulSoup(html_text.content, 'lxml')
@@ -37,7 +44,7 @@ def find_Upper_Price(rent):
     arr = []
     # print(len(getPrices))
     for prices in getPrices:
-        if int(prices.text.replace(',', '').replace('$', '')) <= rent:
+        if int(prices.text.replace(',', '').replace('$', '')) <= int(rent):
             arr.append(int(prices.text.replace(',', '').replace('$', '')))
      # prices = getPrices.text
         # if (prices != None and int(prices.text) <= rent):
@@ -54,7 +61,7 @@ def bed(bedroom):
     # print(len(getBedroom))
     for room in getBedroom:
         #prices = getPrices.text
-        if int(room.text.strip()[0]) < bedroom:
+        if int(room.text.strip()[0]) < int(bedroom):
             arr.append(room.text.strip()[0])
     return arr
 
@@ -99,6 +106,7 @@ def get_date():
 def output(price, name, date, address, bed):
     # print(name)
     arr = []
+    html = """"""
     i = 0
     arr.append(len(price))
     arr.append(len(name))
@@ -109,9 +117,32 @@ def output(price, name, date, address, bed):
     arr.append(len(bed))
     #print(len(price) + len(name) + len(date) + len(address) + len(bed))
     while (i < min(arr)):
-        print(str(price[i]) + str(name[i]) +
-              str(date[i]) + str(address[i]) + str(bed[i]))
+        p = str(price[i])
+        n = str(name[i])
+        d = str(date[i])
+        a = str(address[i])
+        b = str(bed[i])
+        html += f"""
+        <td> {p} </td>
+        <td> {n} </td>
+        <td> {d} </td>
+        <td> {a} </td>
+        <td> {b} </td>
+        """
         i += 1
-    
+    soup = BeautifulSoup(open('templates/output.html'), 'html.parser')
+    div_tag = soup.new_tag("div")
+    div_tag.append(html)
+    soup.div.append(div_tag)
+    with open("templates/output.html", "w") as file:
+        file.write(str(soup))
+    # soup = BeautifulSoup(html)
+    # title = soup.find('title')
+    # meta = soup.new_tag('meta')
+    # meta['content'] = "text/html; charset=UTF-8"
+    # meta['http-equiv'] = "Content-Type"
+    # title.insert_after(meta)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
