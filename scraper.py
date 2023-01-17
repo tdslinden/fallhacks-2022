@@ -105,6 +105,7 @@ def get_date():
 
 def output(price, name, date, address, bed):
     # print(name)
+
     arr = []
     html = """"""
     i = 0
@@ -122,20 +123,44 @@ def output(price, name, date, address, bed):
         d = str(date[i])
         a = str(address[i])
         b = str(bed[i])
-        html += f"""
-        <td> {p} </td>
-        <td> {n} </td>
-        <td> {d} </td>
-        <td> {a} </td>
-        <td> {b} </td>
-        """
+        # html += f"""
+        # <td> {p} </td>
+        # <td> {n} </td>
+        # <td> {d} </td>
+        # <td> {a} </td>
+        # <td> {b} </td>
+        # """
+        soup = BeautifulSoup(open('templates/output.html'), 'html.parser')
+        td_tag1 = soup.new_tag('td')
+        td_tag1.append(f"{p}")
+        td_tag2 = soup.new_tag('td')
+        td_tag2.append(f"{n}")
+        td_tag3 = soup.new_tag('td')
+        td_tag3.append(f"{d}")
+        td_tag4 = soup.new_tag('td')
+        td_tag4.append(f"{a}")
+        td_tag5 = soup.new_tag('td')
+        td_tag5.append(f"{b}")
+        
+        tr_tag = soup.new_tag('tr')
+        tr_tag.append(td_tag1)
+        tr_tag.append(td_tag2)
+        tr_tag.append(td_tag3)
+        tr_tag.append(td_tag4)
+        tr_tag.append(td_tag5)
+        soup.div.append(tr_tag)
+        
+        br_tag = soup.new_tag('br')
+        soup.div.append(soup.new_tag("br"))
+        with open("templates/output.html", "w") as file:
+            file.write(str(soup))
         i += 1
-    soup = BeautifulSoup(open('templates/output.html'), 'html.parser')
-    div_tag = soup.new_tag("div")
-    div_tag.append(html)
-    soup.div.append(div_tag)
-    with open("templates/output.html", "w") as file:
-        file.write(str(soup))
+    # soup = BeautifulSoup(open('templates/output.html'), 'html.parser')
+    # div_tag = soup.new_tag("div")
+    # div_tag.append(html)
+    # soup.div.append(div_tag)
+    # with open("templates/output.html", "w") as file:
+    #     file.write(str(soup))
     # soup = BeautifulSoup(html)
     # title = soup.find('title')
     # meta = soup.new_tag('meta')
