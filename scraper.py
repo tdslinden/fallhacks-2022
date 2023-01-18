@@ -1,4 +1,4 @@
-#from unittest import result
+# from unittest import result
 # from email.utils import getaddresses
 # from socket import getnameinfo
 from bs4 import BeautifulSoup
@@ -60,7 +60,7 @@ def bed(bedroom):
     arr = []
     # print(len(getBedroom))
     for room in getBedroom:
-        #prices = getPrices.text
+        # prices = getPrices.text
         if int(room.text.strip()[0]) < int(bedroom):
             arr.append(room.text.strip()[0])
     return arr
@@ -75,11 +75,19 @@ def get_address(addr):
             address = address.text
             if addr in address:
                 arr_add.append(addr)
+
     return (arr_add)
 
     # for address in addresses:
     #     print(address)
 
+
+def get_Link():
+    arr_link = []
+    link_All = soup.find_all('a', class_='result-image gallery')
+    for link in link_All:
+        arr_link.append(link['href'])
+    return arr_link
 
 def get_Name():
     names = soup.find_all('a', class_='result-title hdrlnk')
@@ -105,8 +113,8 @@ def get_date():
 
 def output(price, name, date, address, bed):
     # print(name)
-
     arr = []
+    link_All = get_Link()
     html = """"""
     i = 0
     arr.append(len(price))
@@ -116,7 +124,7 @@ def output(price, name, date, address, bed):
     arr.append(len(date))
     arr.append(len(address))
     arr.append(len(bed))
-    #print(len(price) + len(name) + len(date) + len(address) + len(bed))
+    # print(len(price) + len(name) + len(date) + len(address) + len(bed))
     while (i < min(arr)):
         p = str(price[i])
         n = str(name[i])
@@ -130,18 +138,25 @@ def output(price, name, date, address, bed):
         # <td> {a} </td>
         # <td> {b} </td>
         # """
+        # new_tag = soup.new_tag('a', href='http://www.example.com')
+
         soup = BeautifulSoup(open('templates/output.html'), 'html.parser')
         td_tag1 = soup.new_tag('td')
-        td_tag1.append(f"{p}")
+        td_tag1.append(f"${p}")
         td_tag2 = soup.new_tag('td')
         td_tag2.append(f"{n}")
         td_tag3 = soup.new_tag('td')
         td_tag3.append(f"{d}")
+
+        a_tag = soup.new_tag('a', href=f'{link_All[i]}')
+        a_tag.append(f"{a}")
+        
         td_tag4 = soup.new_tag('td')
-        td_tag4.append(f"{a}")
+        td_tag4.append(a_tag)
+        
         td_tag5 = soup.new_tag('td')
         td_tag5.append(f"{b}")
-        
+
         tr_tag = soup.new_tag('tr')
         tr_tag.append(td_tag1)
         tr_tag.append(td_tag2)
@@ -149,8 +164,6 @@ def output(price, name, date, address, bed):
         tr_tag.append(td_tag4)
         tr_tag.append(td_tag5)
         soup.div.append(tr_tag)
-        
-        br_tag = soup.new_tag('br')
         soup.div.append(soup.new_tag("br"))
         with open("templates/output.html", "w") as file:
             file.write(str(soup))
